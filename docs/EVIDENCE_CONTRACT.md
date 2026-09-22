@@ -1,9 +1,9 @@
 # Evidence contract — Iris
 
-No `evidence_first` tool. Family envelope v1: skills `instrument-evidence-envelope.schema.json`.
+No `evidence_first` tool. Result contract v1: skills `product-evidence-envelope.schema.json`.
 
 Locators: pixel bboxes, regions, source path/hash, OCR confidence warnings, gaps for missing OCR packs.
-Optional L2 semantics are `scored_non_locator` and never override OCR/geometry.
+Optional optional semantics semantics are `scored_non_locator` and never override OCR/geometry.
 
 ## Implemented family wire fields (v1)
 
@@ -15,4 +15,4 @@ Every tool result includes:
 - `warnings` and `gaps` arrays (may be empty)
 - domain payload (often also as top-level twin/results/answer for compatibility)
 
-Schema: `SylphxAI/skills` `schemas/instrument-evidence-envelope.schema.json`.
+Schema: `SylphxAI/skills` `schemas/product-evidence-envelope.schema.json`.

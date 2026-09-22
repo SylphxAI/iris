@@ -1,6 +1,6 @@
 # Iris / Cue — Research Card (5 cells)
 
-**Context:** Owner asked whether Iris/Cue are real value or metadata+OCR trivia, and whether modern local vision can "see" objects/people/animals. Answer: yes — L2 semantics. This card is the decision record.
+**Context:** Owner asked whether Iris/Cue are real value or metadata+OCR trivia, and whether modern local vision can "see" objects/people/animals. Answer: yes — optional semantics semantics. This card is the decision record.
 
 ## 1. Competitive landscape
 
@@ -17,8 +17,8 @@
 
 Local, evidence-first **open-vocab visual semantics with locators** for agents:
 
-- L0/L1 facts (geometry/OCR/layout) always on, deterministic, citeable.
-- L2 (`include_semantics`) optional open-vocab objects (people/animals/things) with pixel bboxes + scored_non_locator authority; never clouds L0/L1.
+- deterministic facts (geometry/OCR/layout) always on, deterministic, citeable.
+- optional semantics (`include_semantics`) optional open-vocab objects (people/animals/things) with pixel bboxes + scored_non_locator authority; never clouds deterministic.
 - Video: scene-structural keyframes → Iris objects by timestamp (Cue→Iris compose), no per-frame VLM.
 - Zero API key for default path; model weights never bundled; sidecar optional.
 
@@ -28,14 +28,14 @@ Local, evidence-first **open-vocab visual semantics with locators** for agents:
 | --- | --- |
 | Bundle an ONNX/transformers model in npm | Rejected — breaks zero-config / size / multi-arch native package policy |
 | Cloud-only vision (GPT-4V default) | Rejected — violates Local-first floor |
-| Docs-only, no L2 | Rejected — leaves only "metadata wizardry", no wow |
+| Docs-only, no optional semantics | Rejected — leaves only "metadata wizardry", no wow |
 | New separate MCP tool for objects | Rejected — schema explosion; kept one `read_image` + flags |
 | Inline Cue OD | Rejected — scope duplication; Cue stays timeline/evidence |
 
 ## 4. Risks
 
-- Perception as "another hallucinating caption tool" → mitigated: L2 is opt-in, scored, non-authority vs locators.
-- Users without GPU/model get no L2 → honest `skipped_reason`; package still valuable (L0/L1).
+- Perception as "another hallucinating caption tool" → mitigated: optional semantics is opt-in, scored, non-authority vs locators.
+- Users without GPU/model get no optional semantics → honest `skipped_reason`; package still valuable (deterministic).
 - License/weights management → sidecar keeps weights out of repo; adapters remain user-side.
 - Over-granular tool surface → kept to one tool + flags.
 

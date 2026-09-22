@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0
+
+- Add `compare_images` for deterministic UI and image diff evidence.
+- Add explicit `fast` and `quality` profiles; expensive OCR and local semantics remain opt-in.
+- Refresh Iris positioning, documentation, and canonical repository identity.
 ## 0.2.0
 
 ### Breaking

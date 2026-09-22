@@ -38,10 +38,10 @@ See [COMPETITIVE.md](./COMPETITIVE.md).
 
 See [IPPB.md](./IPPB.md).
 
-## L2 local semantics (2026-08)
+## optional semantics local semantics (2026-08)
 
 Optional open-vocab objects + caption via local Florence/DINO/SAM adapters or Ollama,
-behind `include_semantics`. Default remains L0/L1 facts only (zero-config).
+behind `include_semantics`. Default remains deterministic facts only (zero-config).
 
 ## Zero-config
 

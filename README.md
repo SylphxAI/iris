@@ -1,218 +1,90 @@
-<!-- Marketing: promise → CTA → comparison → why → demo → tools → docs -->
-<div align="center">
-
 # Iris
 
-### Image evidence for agents — not vision-model guesses.
+### Image facts with pixel-level proof
 
-**Local-first image facts** your agent can cite: dimensions, metadata, regions, optional OCR with boxes.
-
-**Canonical** [`@sylphx/iris`](https://www.npmjs.com/package/@sylphx/iris) · **bin** `iris` · **live** `0.2.1`
-
-[![npm version](https://img.shields.io/npm/v/@sylphx/iris?style=flat-square)](https://www.npmjs.com/package/@sylphx/iris)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](https://opensource.org/licenses/MIT)
-[![stars](https://img.shields.io/github/stars/SylphxAI/image-reader-mcp?style=flat-square)](https://github.com/SylphxAI/image-reader-mcp/stargazers)
-
-</div>
-
-## Zero-config in one line
+Iris gives agents deterministic facts from screenshots, UI captures, forms,
+diagrams, charts, and other images. It returns dimensions, metadata, OCR
+regions, layout blocks, crops, and trust warnings without requiring a
+generative vision model.
 
 ```bash
 npx -y @sylphx/iris
 ```
 
-No API key. No global install. Starts a **stdio MCP server** agents can spawn immediately.
-
-| Client | Setup |
-| --- | --- |
-| **Any agent / CLI** | `npx -y @sylphx/iris` |
-| **Claude Code** | `claude mcp add iris -- npx -y @sylphx/iris` |
-| **Desktop / Cursor / VS Code / Codex** | `"command": "npx", "args": ["-y", "@sylphx/iris"]` |
-
-## Why Iris feels unfairly good
-
-Your agent looked at the image. **Did it see the truth?**
-
-| Vision model guess | **Iris** |
-| --- | --- |
-| Facts vary by model | **Deterministic media twin** |
-| OCR paraphrased | Optional OCR **with bboxes + confidence** |
-| Cloud API by default | **Local-first**, no key required for core path |
-| Setup: keys + SDKs | **`npx -y` — done** |
-| Brand mix | `@sylphx/iris` · bin `iris` · brand-sole `serverInfo.name=iris` |
-
-### Five reasons teams pick Iris
-
-1. **Zero-config MCP** — real one-liner for agents.
-2. **Facts over captions** — measurable fields agents can defend.
-3. **Local-first** — geometry/OCR/layout without default cloud VLM.
-4. **Fail closed** — missing native binary does not silently invent an engine.
-5. **Family ready** — compose with Citra (PDF), Cue (video), Locus (code).
-
-## What agents get
-
-Primary surface centers on **`read_image`** (Agent Media Twin). Optional advanced paths stay evidence-shaped.
-
-Minimal call:
-
-```json
-{ "path": "/absolute/path/to/photo.jpg" }
-```
-
-### Flagship use cases
-
-1. **Screenshots & UI captures** — dimensions, text regions, layout without VLM paraphrase  
-2. **Document photos** — OCR lines with geometry for citation  
-3. **Trust / privacy** — EXIF/GPS handling and trust warnings when requested  
-
-## Product docs
-
-| Doc | Purpose |
-| --- | --- |
-| [docs/POSITIONING.md](docs/POSITIONING.md) | Strategic positioning |
-| [docs/COMPETITIVE.md](docs/COMPETITIVE.md) | Peer anchors and wedge |
-| [docs/EVIDENCE_CONTRACT.md](docs/EVIDENCE_CONTRACT.md) | Evidence = result contract |
-| [docs/TOOL_SURFACE.md](docs/TOOL_SURFACE.md) | Few clear tools policy |
-| [docs/PRODUCT_INDEPENDENCE.md](docs/PRODUCT_INDEPENDENCE.md) | This repo is SSOT |
-| [docs/IPPB.md](docs/IPPB.md) | Independent public product bar |
-| [docs/PUBLISH.md](docs/PUBLISH.md) | npm / git publish status |
-
-
-## See objects (L2, optional)
-
-With a local Florence-class sidecar or Ollama, the same `read_image` can return **open-vocab objects** with pixel bboxes and scores:
-
-```json
-{ "path": "/abs/photo.jpg", "include_semantics": true, "semantics_prompt": "people and animals" }
-```
-
-Objects are `scored_non_locator` evidence — deterministic L0/L1 facts (geometry/OCR/layout) stay authoritative and always on.
-
-## Read images (not vague vision)
-
-Iris is **local-first**: geometry + OCR + **layout blocks** + **agent_map** so a text-only agent can understand picture architecture without a vision model.
-
-Spec: [docs/specs/agent-image-read-contract.md](docs/specs/agent-image-read-contract.md)
-
-**Local-first frontier:** Rust decode, Tesseract native layout (no npm ML), optional Ollama VLM; cloud URL optional. Zero API key. Optional **L2 local semantics** (include_semantics) detects open-vocab objects (people/animals/things) with pixel bboxes via an official Florence-class sidecar (examples/florence-sidecar/) or Ollama -- never authority over OCR/layout locators.
-
-## See it work
-
-### Why Iris wins for agents
-
-1. **Zero-config** — `npx -y @sylphx/iris` starts MCP on stdio.
-2. **Facts over captions** — structure agents can cite, not free-text “I see a chart”.
-3. **Local-first** — files never leave the machine by default.
-4. **Family** — pair with Citra (PDF), Cue (video), Locus (code).
-
-## MCP Tool Surface
-
-| Tool | Use it when the agent needs to... |
-| --- | --- |
-| `read_image` | Read a local image and return dimensions, mime, metadata, optional OCR, and trust warnings. |
-
-Supported formats: PNG, JPEG, GIF, WebP, TIFF, and other formats the **Rust decode engine** supports (optional sharp covers additional formats when installed).
-
-## Quick Start
-
-### Claude Code
+For Claude Code:
 
 ```bash
+claude mcp add iris -- npx -y @sylphx/iris
 ```
 
-### Claude Desktop
-
-Add this to `claude_desktop_config.json`:
+## The fastest useful workflow
 
 ```json
 {
-  "mcpServers": {
-    "iris": {
-      "command": "npx",
-      "args": ["-y", "@sylphx/iris"]
-    }
-  }
+  "path": "/absolute/path/to/screenshot.png",
+  "include_ocr": true
 }
 ```
 
-### Any MCP Client
+The result includes image dimensions, hash, OCR lines with bounding boxes,
+layout blocks, a text map for agents, and explicit warnings or gaps.
 
-```bash
-npx -y @sylphx/iris
-```
+## Jobs Iris is built for
 
-Node.js `>=22.13` is required. Optional OCR uses a local Tesseract adapter when
-installed — no cloud credentials required by default.
+| Ask your agent | Iris returns |
+| --- | --- |
+| “Read this screenshot.” | text regions and layout facts |
+| “What changed between these UI captures?” | image diff evidence |
+| “Extract this form.” | OCR lines and boxes |
+| “Crop the important region.” | citeable pixel evidence |
+| “Check the image metadata.” | format, dimensions, EXIF trust warnings |
 
-## Security model
+## Tool surface
 
-- **Local-first** — `read_image` resolves paths on the local machine; no cloud vision API by default.
-- **GPS redaction** — location metadata is stripped from agent-facing output unless explicitly opted in.
-- **Size and format limits** — oversized or unsupported inputs return structured errors, not partial guesses.
-- **Optional OCR** — Tesseract runs locally when installed; missing OCR is reported as `available: false`, not silent failure.
-- **Trust warnings** — suspicious EXIF, orientation, or metadata anomalies surface in `trust_warnings` for agent verification.
+| Tool | Purpose |
+| --- | --- |
+| `read_image` | Primary image facts and optional OCR |
+| `image_probe` | Cheap metadata and geometry probe |
+| `crop_region` | Extract a citeable pixel region |
+| `compare_images` | Report pixel and layout differences between two images |
 
-## Release proof
+## Predictable defaults
 
-Claims are backed by CI `benchmark:release-gate` and the shipped-path matrix (Rust-default route, no legacy Node engine on primary tools).
+- `fast` returns deterministic metadata, geometry, and layout.
+- `quality` explicitly enables OCR and local semantic helpers.
+- Generative captions and object detection are opt-in and never authoritative.
+- GPS metadata is redacted unless explicitly requested.
+- Oversized or unsupported files fail with a structured error.
 
-```bash
-bun run benchmark:release-gate
-```
+## Why agents trust it
 
-Artifact: `benchmark-artifacts/image_reader_release_gate.json` — must report `status: passed` before release.
+Every result keeps source path and hash, pixel locators, extraction route,
+confidence or warnings, and known gaps. OCR and optional model output never
+replace deterministic geometry.
+
+## Companion MCP tools
+
+| Product | Job |
+| --- | --- |
+| [Citra](https://github.com/SylphxAI/citra) | PDF answers with page-level proof |
+| [Cue](https://github.com/SylphxAI/cue) | Video timelines and timestamp evidence |
+| [Spine](https://github.com/SylphxAI/spine) | Repository architecture and impact |
+| [Locus](https://github.com/SylphxAI/locus) | Exact code-chunk retrieval |
+| [Lookout](https://github.com/SylphxAI/lookout) | Web research with source excerpts |
+
+Each product is independent. Install only the tools your agent needs.
 
 ## Development
 
 ```bash
-git clone https://github.com/SylphxAI/image-reader-mcp.git
-cd image-reader-mcp
 bun install
 bun run build
 bun test
-bun run doctor
+cargo test
+bun run benchmark:public-proof
 bun run benchmark:release-gate
 ```
-
-Useful checks:
-
-```bash
-bun run check
-bun run typecheck
-bun run validate
-bun run benchmark:release-gate
-```
-
-Example `read_image` requests live in [`examples/`](examples/).
-
-## Support
-
-- [Issues](https://github.com/SylphxAI/image-reader-mcp/issues)
-- [npm package](https://www.npmjs.com/package/@sylphx/iris)
-- Portfolio orchestration: [smart-reader-mcp](https://github.com/SylphxAI/smart-reader-mcp)
-
-## Help this reach more builders
-
-If vision-model guesses have wasted your context, your citations, or your trust
-in agent output, you are exactly who this project is for.
-
-**[⭐ Star the repo](https://github.com/SylphxAI/image-reader-mcp)** — it is the
-fastest way to help more agent builders find evidence-first image reading. Share
-it in your MCP client setup, team wiki, or agent stack README.
-
-### Discovery (in progress)
-
-| Channel | Status |
-| --- | --- |
-| [Glama MCP directory](https://glama.ai/mcp/servers/SylphxAI/image-reader-mcp) | Listed — [claim server](https://glama.ai/mcp/servers/SylphxAI/image-reader-mcp/admin) for full discoverability |
-| [Official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.SylphxAI/image-reader-mcp) | Listed — `io.github.SylphxAI/image-reader-mcp` @ v0.1.0 |
-| [TensorBlock MCP Index PR #1113](https://github.com/TensorBlock/awesome-mcp-servers/pull/1113) | Open — multimedia/document processing listing |
-| [MCP servers community issue #4500](https://github.com/modelcontextprotocol/servers/issues/4500) | Open — community server highlight |
-| [mcp.so listing issue #3068](https://github.com/chatmcp/mcpso/issues/3068) | Open — directory submission request |
-| [mcpservers.org submit](https://mcpservers.org/submit) | Not listed yet — free web-form submission |
-
-Know another MCP directory? [Open an issue](https://github.com/SylphxAI/image-reader-mcp/issues/new) with the link.
 
 ## License
 
-MIT © [SylphxAI](https://github.com/SylphxAI)
+MIT

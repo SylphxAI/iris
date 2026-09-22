@@ -1,8 +1,8 @@
 {
   "name": "@sylphx/iris",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "mcpName": "io.github.SylphxAI/iris",
-  "description": "Iris \u2014 evidence-first image reading for AI agents. Metadata, OCR text, regions, citeable evidence. Local-first. No generative LLM authority.",
+  "description": "Iris — image facts with pixel-level proof. Local-first metadata, OCR boxes, layout, crops, and image diff evidence.",
   "type": "module",
   "bin": {
     "iris": "./bin/iris"
@@ -24,9 +24,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SylphxAI/image-reader-mcp.git"
+    "url": "git+https://github.com/SylphxAI/iris.git"
   },
-  "homepage": "https://github.com/SylphxAI/image-reader-mcp#readme",
+  "homepage": "https://sylphxai.github.io/iris/",
   "keywords": [
     "mcp",
     "model-context-protocol",
@@ -63,7 +63,10 @@
     "prepublishOnly": "bun run clean && bun run build && bun run build:rust",
     "release": "bun run typecheck && bun run check && bun run build && bun test && changeset publish",
     "benchmark:public-proof": "bun scripts/public-proof.ts",
-    "brand:pack-plan": "bun scripts/brand-pack-plan.ts"
+    "brand:pack-plan": "bun scripts/brand-pack-plan.ts",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -75,16 +78,17 @@
     "@changesets/cli": "^2.31.0",
     "@types/node": "^25.9.1",
     "bunup": "0.16.31",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitepress": "1.6.4"
   },
   "packageManager": "bun@1.4.0",
   "private": false,
   "optionalDependencies": {
     "sharp": "^0.35.0",
     "exifr": "^7.1.3",
-    "@sylphx/iris-darwin-arm64": "0.2.1",
-    "@sylphx/iris-darwin-x64": "0.2.1",
-    "@sylphx/iris-linux-x64-gnu": "0.2.1",
-    "@sylphx/iris-linux-arm64-gnu": "0.2.1"
+    "@sylphx/iris-darwin-arm64": "0.3.0",
+    "@sylphx/iris-darwin-x64": "0.3.0",
+    "@sylphx/iris-linux-x64-gnu": "0.3.0",
+    "@sylphx/iris-linux-arm64-gnu": "0.3.0"
   }
 }

@@ -1,3 +1,3 @@
 # Product independence — Iris
 
-Brand-sole Instrument. No instruments monorepo. Prism retired. Family law in skills.
+Brand-sole product. No products monorepo. Prism is not part of the public product surface. Family law in skills.

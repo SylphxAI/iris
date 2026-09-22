@@ -24,7 +24,7 @@ impl FreeformToolArgs {
 }
 
 pub const SERVER_NAME: &str = "iris";
-pub const SERVER_VERSION: &str = "0.2.1";
+pub const SERVER_VERSION: &str = "0.3.0";
 pub const SERVER_INSTRUCTIONS: &str =
     "Evidence-first image reader MCP server (Rust rmcp transport). Use read_image for Agent Media Twin metadata, optional region evidence, and trust warnings without generative LLM.";
 
@@ -52,6 +52,16 @@ impl ImageReaderMcp {
     ) -> Result<rmcp::model::CallToolResult, ErrorData> {
         read_image::read_image(args.into_value())
     }
+
+    #[tool(
+        description = "Compare two same-size images and report changed pixels and a changed bounding box."
+    )]
+    fn compare_images(
+        &self,
+        Parameters(args): Parameters<FreeformToolArgs>,
+    ) -> Result<rmcp::model::CallToolResult, ErrorData> {
+        read_image::compare_images(args.into_value())
+    }
 }
 
 #[tool_handler]
@@ -64,7 +74,7 @@ impl ServerHandler for ImageReaderMcp {
                     .with_description(
                         "Rust-native MCP server for Iris (@sylphx/iris) (modelcontextprotocol/rust-sdk rmcp)",
                     )
-                    .with_website_url("https://github.com/SylphxAI/image-reader-mcp"),
+                    .with_website_url("https://github.com/SylphxAI/iris"),
             )
             .with_instructions(SERVER_INSTRUCTIONS)
     }

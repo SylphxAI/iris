@@ -8,7 +8,7 @@ pub enum ToolRoute {
 
 pub fn route_for_tool(tool: &str) -> Option<ToolRoute> {
     match tool {
-        "read_image" | "image_probe" | "crop_region" => Some(ToolRoute::RustCore),
+        "read_image" | "image_probe" | "crop_region" | "compare_images" => Some(ToolRoute::RustCore),
         _ => None,
     }
 }
