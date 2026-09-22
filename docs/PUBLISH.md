@@ -3,8 +3,9 @@
 | Field | Value |
 | --- | --- |
 | Canonical npm | `@sylphx/iris` |
-| Source tip | `0.2.0` |
-| Deprecated CTA | `@sylphx/image-reader-mcp` |
+| Version | `0.3.0` |
+| MCP Registry | `io.github.SylphxAI/iris` |
+| Natives | `@sylphx/iris-<platform>` |
 
 ```bash
 npm i -g @sylphx/iris
@@ -16,4 +17,5 @@ npm i -g @sylphx/iris
 npx -y @sylphx/iris
 ```
 
-Live **@sylphx/iris@0.2.1**. Bare MCP stdio for agents.
+`@sylphx/iris` is the sole install call to action and exposes bare MCP stdio for
+agents.

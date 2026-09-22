@@ -67,7 +67,7 @@ Response JSON:
 
 ## Official sidecar
 
-A reference adapter lives at [`examples/florence-sidecar/`](../../examples/florence-sidecar/README.md).
+A reference adapter lives at [`examples/florence-sidecar/`](https://github.com/SylphxAI/iris/tree/main/examples/florence-sidecar).
 It implements this exact contract with a local Florence-2 class model so
 `read_image { include_semantics: true }` returns open-vocab objects with pixel
 bboxes, fully offline. Model weights are **not** bundled into the Iris package.

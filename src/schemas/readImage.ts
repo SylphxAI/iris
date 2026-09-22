@@ -20,6 +20,12 @@ export const imageDimensionsSchema = z.object({
 
 export const readImageArgsSchema = z.object({
   path: z.string().min(1).describe('Path to the local image file (absolute or relative to cwd).'),
+  profile: z
+    .enum(['fast', 'quality'])
+    .optional()
+    .describe(
+      'Predictable work profile. Fast is deterministic geometry; quality explicitly enables OCR and optional local semantics. '
+    ),
   include_metadata: z
     .boolean()
     .optional()

@@ -122,3 +122,24 @@ mod tests {
         );
     }
 }
+
+pub fn compare_images(args: Value) -> Result<CallToolResult, rmcp::ErrorData> {
+    let before = args.get("before").and_then(Value::as_str).ok_or_else(|| rmcp::ErrorData::invalid_params("before is required", None))?;
+    let after = args.get("after").and_then(Value::as_str).ok_or_else(|| rmcp::ErrorData::invalid_params("after is required", None))?;
+    let max_file_bytes = args.get("max_file_bytes").and_then(Value::as_u64).unwrap_or(32 * 1024 * 1024);
+    let threshold = args.get("threshold").and_then(Value::as_u64).unwrap_or(0) as u8;
+    let diff = image_reader_core::compare_images(std::path::Path::new(before), std::path::Path::new(after), max_file_bytes, threshold)
+        .map_err(|error| rmcp::ErrorData::invalid_request(error.message, None))?;
+    let structured = serde_json::json!({
+        "status": "ok",
+        "tool": "compare_images",
+        "product": "iris",
+        "product_version": crate::SERVER_VERSION,
+        "envelope_version": "1",
+        "route": { "engine": "rust-core", "path": "rust-image-diff" },
+        "diff": diff,
+        "warnings": [],
+        "gaps": [],
+    });
+    Ok(CallToolResult::structured(structured))
+}

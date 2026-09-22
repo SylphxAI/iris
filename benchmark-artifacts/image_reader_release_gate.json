@@ -1,7 +1,7 @@
 {
   "profile": "image_reader_release_gate",
-  "generated_at": "2026-08-07T18:02:05.680Z",
-  "artifact_dir": "/home/codex/src/github.com/SylphxAI/image-reader-mcp/benchmark-artifacts",
+  "generated_at": "2026-09-22T15:12:38.025Z",
+  "artifact_dir": "/tmp/sylphx-blueprint.Ow7tC0/image-reader-mcp/benchmark-artifacts",
   "status": "passed",
   "summary": {
     "total": 18,
@@ -97,7 +97,7 @@
       "status": "passed",
       "message": "doctor reports sharp decode pipeline is available",
       "evidence": {
-        "doctorStatus": "ready"
+        "doctorStatus": "degraded"
       }
     },
     {

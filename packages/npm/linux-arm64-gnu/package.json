@@ -1,6 +1,6 @@
 {
   "name": "@sylphx/iris-linux-arm64-gnu",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Iris native MCP server binary for linux-arm64-gnu",
   "os": [
     "linux"
@@ -21,10 +21,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SylphxAI/image-reader-mcp.git",
+    "url": "https://github.com/SylphxAI/iris.git",
     "directory": "packages/npm/linux-arm64-gnu"
   },
   "engines": {
     "node": ">=22.13.0"
-  }
+  },
+  "homepage": "https://sylphxai.github.io/iris/"
 }

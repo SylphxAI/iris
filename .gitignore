@@ -16,3 +16,5 @@ test-report.junit.xml
 node_modules/
 __pycache__/
 *.pyc
+bin/native/*
+packages/mcp-server/bin/native/*

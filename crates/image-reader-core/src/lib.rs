@@ -235,6 +235,82 @@ fn validate_bbox(bbox: &RegionBBox, image_width: u32, image_height: u32) -> Resu
     Ok(())
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct ImageDiffEvidence {
+    pub identical: bool,
+    pub width: u32,
+    pub height: u32,
+    pub changed_pixels: u64,
+    pub changed_ratio: f64,
+    pub changed_bbox: Option<RegionBBox>,
+    pub before_hash: String,
+    pub after_hash: String,
+    pub route: String,
+}
+
+pub fn compare_images(
+    before_path: &Path,
+    after_path: &Path,
+    max_file_bytes: u64,
+    threshold: u8,
+) -> Result<ImageDiffEvidence, ProbeError> {
+    let before_bytes = read_image_bytes(before_path, max_file_bytes)?;
+    let after_bytes = read_image_bytes(after_path, max_file_bytes)?;
+    let before = image::load_from_memory(&before_bytes)
+        .map_err(|err| ProbeError::invalid_request(format!("Unable to decode before image: {err}")))?
+        .to_rgba8();
+    let after = image::load_from_memory(&after_bytes)
+        .map_err(|err| ProbeError::invalid_request(format!("Unable to decode after image: {err}")))?
+        .to_rgba8();
+    if before.dimensions() != after.dimensions() {
+        return Err(ProbeError::invalid_params(
+            "compare_images requires matching image dimensions; crop or resize explicitly first.",
+        ));
+    }
+    let (width, height) = before.dimensions();
+    let mut changed_pixels = 0u64;
+    let mut min_x = width;
+    let mut min_y = height;
+    let mut max_x = 0u32;
+    let mut max_y = 0u32;
+    for y in 0..height {
+        for x in 0..width {
+            let a = before.get_pixel(x, y).0;
+            let b = after.get_pixel(x, y).0;
+            let delta = a
+                .iter()
+                .zip(b.iter())
+                .map(|(left, right)| left.abs_diff(*right))
+                .max()
+                .unwrap_or(0);
+            if delta > threshold {
+                changed_pixels += 1;
+                min_x = min_x.min(x);
+                min_y = min_y.min(y);
+                max_x = max_x.max(x);
+                max_y = max_y.max(y);
+            }
+        }
+    }
+    let total = u64::from(width) * u64::from(height);
+    Ok(ImageDiffEvidence {
+        identical: changed_pixels == 0,
+        width,
+        height,
+        changed_pixels,
+        changed_ratio: if total == 0 { 0.0 } else { changed_pixels as f64 / total as f64 },
+        changed_bbox: (changed_pixels > 0).then_some(RegionBBox {
+            x: min_x,
+            y: min_y,
+            width: max_x.saturating_sub(min_x).saturating_add(1),
+            height: max_y.saturating_sub(min_y).saturating_add(1),
+        }),
+        before_hash: format!("{:x}", Sha256::digest(&before_bytes)),
+        after_hash: format!("{:x}", Sha256::digest(&after_bytes)),
+        route: "rust-image-diff".into(),
+    })
+}
+
 pub fn crop_region(
     path: &Path,
     max_file_bytes: u64,

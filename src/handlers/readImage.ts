@@ -116,8 +116,9 @@ export const readImage = tool()
       const fileStat = await stat(resolvedPath);
       validateImageSafety({ fileSizeBytes: fileStat.size });
 
+      const profile = input.profile ?? 'fast';
       const includeMetadata = input.include_metadata ?? true;
-      const includeOcr = input.include_ocr ?? false;
+      const includeOcr = input.include_ocr ?? profile === 'quality';
       const ocrLanguages = input.ocr_languages ?? ['eng'];
       const useRustDecode = shouldUseRustDecodeEngine();
 
@@ -243,7 +244,11 @@ export const readImage = tool()
         };
       }
 
-      twin = await applyImageIntelligence(twin, resolvedPath, input, includeOcr);
+      const intelligenceInput =
+        profile === 'quality' && input.include_semantics === undefined
+          ? { ...input, include_semantics: true as const }
+          : input;
+      twin = await applyImageIntelligence(twin, resolvedPath, intelligenceInput, includeOcr);
 
       if (input.region !== undefined) {
         if (!useRustDecode) {

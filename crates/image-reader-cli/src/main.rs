@@ -1,6 +1,6 @@
 use image_reader_core::{
-    crop_region, probe_image, ProbeErrorCode, RegionBBox, ENGINE_NAME, ENGINE_VERSION,
-    READ_IMAGE_ROUTE,
+    compare_images, crop_region, probe_image, ProbeErrorCode, RegionBBox, ENGINE_NAME,
+    ENGINE_VERSION, READ_IMAGE_ROUTE,
 };
 use serde::Deserialize;
 use std::io::{self, Read};
@@ -61,6 +61,38 @@ fn policy_code(code: ProbeErrorCode) -> &'static str {
     match code {
         ProbeErrorCode::InvalidParams => "INVALID_PARAMS",
         ProbeErrorCode::InvalidRequest => "INVALID_REQUEST",
+    }
+}
+
+fn handle_compare_images(input: &serde_json::Value) -> Result<String, ErrorEnvelope> {
+    let before = input.get("before").and_then(|v| v.as_str()).ok_or_else(|| ErrorEnvelope {
+        status: "error",
+        code: "INVALID_PARAMS".into(),
+        message: "before is required".into(),
+        next_action: "Pass before and after image paths.".into(),
+    })?;
+    let after = input.get("after").and_then(|v| v.as_str()).ok_or_else(|| ErrorEnvelope {
+        status: "error",
+        code: "INVALID_PARAMS".into(),
+        message: "after is required".into(),
+        next_action: "Pass before and after image paths.".into(),
+    })?;
+    let max_file_bytes = input.get("max_file_bytes").and_then(|v| v.as_u64()).unwrap_or(32 * 1024 * 1024);
+    let threshold = input.get("threshold").and_then(|v| v.as_u64()).unwrap_or(0) as u8;
+    match compare_images(PathBuf::from(before).as_path(), PathBuf::from(after).as_path(), max_file_bytes, threshold) {
+        Ok(diff) => Ok(serde_json::to_string(&serde_json::json!({
+            "status": "ok",
+            "engine": ENGINE_NAME,
+            "version": ENGINE_VERSION,
+            "tool": "compare_images",
+            "diff": diff,
+        })).expect("serialize compare_images")),
+        Err(error) => Err(ErrorEnvelope {
+            status: "error",
+            code: policy_code(error.code).into(),
+            message: error.message,
+            next_action: "Use two same-size images or crop/resize them explicitly first.".into(),
+        }),
     }
 }
 
@@ -230,6 +262,10 @@ fn main() {
     };
 
     let output = match request.tool.as_str() {
+        "compare_images" => match handle_compare_images(&request.input) {
+            Ok(value) => value,
+            Err(error) => serde_json::to_string(&error).expect("serialize error"),
+        },
         "read_image" => match image_reader_core::read_image_from_value(&request.input) {
             Ok(success) => serde_json::to_string(&ReadImageSuccessEnvelope {
                 envelope_version: "1",
@@ -269,7 +305,7 @@ fn main() {
             status: "error",
             code: "UNSUPPORTED_TOOL".into(),
             message: format!("Unsupported tool: {other}"),
-            next_action: "Use read_image, image_probe, or crop_region.".into(),
+            next_action: "Use read_image, image_probe, crop_region, or compare_images.".into(),
         })
         .expect("serialize"),
     };
