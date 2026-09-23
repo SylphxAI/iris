@@ -74,7 +74,7 @@ impl ServerHandler for ImageReaderMcp {
                     .with_description(
                         "Rust-native MCP server for Iris (@sylphx/iris) (modelcontextprotocol/rust-sdk rmcp)",
                     )
-                    .with_website_url("https://github.com/SylphxAI/iris"),
+                    .with_website_url("https://sylphxai.github.io/iris/"),
             )
             .with_instructions(SERVER_INSTRUCTIONS)
     }
