@@ -24,11 +24,13 @@ describe('Iris Instruments product contract', () => {
     const server = JSON.parse(readFileSync(join(root, 'server.json'), 'utf8')) as {
       title?: string;
       name?: string;
+      description?: string;
       packages?: { identifier?: string }[];
     };
     expect(server.title).toBe('Iris');
     expect(server.name).toBe('io.github.SylphxAI/iris');
     expect(server.packages?.[0]?.identifier).toBe('@sylphx/iris');
+    expect((server.description ?? '').length).toBeLessThanOrEqual(100);
   });
 
   test('sample fixture exists for local read tests', () => {
