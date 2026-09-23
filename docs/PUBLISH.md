@@ -3,7 +3,7 @@
 | Field | Value |
 | --- | --- |
 | Canonical npm | `@sylphx/iris` |
-| Version | `0.3.3` |
+| Version | `package.json` `version` |
 | MCP Registry | `io.github.SylphxAI/iris` |
 | Natives | `@sylphx/iris-<platform>` |
 
