@@ -18,7 +18,7 @@ hero:
 
 features:
   - title: Geometry first
-    details: fast, or no profile, returns dimensions, format, metadata, and trust warnings. It does not run OCR.
+    details: The fast profile, or no profile, returns dimensions, format, metadata, and trust warnings. It does not run OCR.
   - title: Text when named
     details: quality or include_ocr runs local Tesseract. A missing binary is a gap, and the read still succeeds.
   - title: Pixels you can cite
