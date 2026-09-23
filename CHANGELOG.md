@@ -1,17 +1,25 @@
 # Changelog
 
+## 0.3.1
+
+### Patch Changes
+
+- 8192d19: The MCP `initialize` response advertises the docs site, and the package gains discovery keywords.
+
+  `serverInfo.websiteUrl` pointed at the GitHub repository while every companion tool points at its product site; it now advertises `https://sylphxai.github.io/iris/`. The published `keywords` also grow from five generic terms to the real queries users type — image analysis, computer vision, screenshots, UI testing, image diff, EXIF, layout analysis, crops, pixel evidence.
+
 ## 0.3.0
 
 - Add `compare_images` for deterministic UI and image diff evidence.
 - Add explicit `fast` and `quality` profiles; expensive OCR and local semantics remain opt-in.
 - Refresh Iris positioning, documentation, and canonical repository identity.
+
 ## 0.2.0
 
 ### Breaking
 
 - Brand-sole `@sylphx/iris` (bin `iris`).
 - Family envelope v1; Prism retired.
-
 
 ## 0.1.0
 
