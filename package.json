@@ -2,7 +2,7 @@
   "name": "@sylphx/iris",
   "version": "0.3.3",
   "mcpName": "io.github.SylphxAI/iris",
-  "description": "Iris \u2014 image facts with pixel-level proof. Local-first metadata, OCR boxes, layout, crops, and image diff evidence.",
+  "description": "Iris \u2014 image facts with pixel-level proof. Dimensions, format, and metadata by default; local Tesseract OCR only when requested.",
   "type": "module",
   "bin": {
     "iris": "./bin/iris"
@@ -39,7 +39,6 @@
     "image-diff",
     "metadata",
     "exif",
-    "layout-analysis",
     "crops",
     "pixel-evidence",
     "visual-evidence",

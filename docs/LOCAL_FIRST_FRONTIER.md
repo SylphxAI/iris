@@ -1,59 +1,41 @@
 # Local-first frontier (Iris)
 
-## Principles (hard)
+## Principles
 
-1. **Less dependency** — no npm ML wheels; system binaries + Rust natives  
-2. **Zero config** — path-only read works without API keys  
-3. **Local first, cloud optional** — OCR local; VLM only if user opts in  
-4. **Speed / size / performance** — cheap probe; OCR opt-in  
-5. **Rust first** — decode/crop/MCP via native when staged  
-6. **Simple but powerful** — lead with `read_image`
+1. **No API key on the default path.** `npx -y @sylphx/iris` starts a local stdio server.
+2. **Geometry before text.** `fast`, or no profile, returns dimensions, format, and metadata. It does not run OCR.
+3. **OCR is local and opt-in.** `quality` or `include_ocr` runs Tesseract on `PATH` and reports a gap when that binary is missing.
+4. **No generative vision model.** Iris does not caption an image and does not detect objects.
+5. **Four tools.** `read_image`, `image_probe`, `crop_region`, `compare_images`. The last three never run OCR.
+6. **Evidence you can point at.** Path, hash, pixel bounds, route, warnings, and gaps. GPS is always redacted.
 
-## What is true today (evidence)
-
-| Layer | Status | Evidence |
-| --- | --- | --- |
-| MCP launcher | Rust-first fail-closed | `bin/iris` → staged native server |
-| Package size | **~9.7 MB unpacked** | almost entirely `bin/native/iris-mcp-server` |
-| npm hard deps | **Improved** | hard: `@modelcontextprotocol/sdk`, `zod` for doctor/SDK; `sharp`/`exifr` **optional** |
-| OCR | Local optional | Tesseract on PATH (not npm wheel) |
-| VLM | Optional | Ollama local or `IRIS_OPTIONAL_LLM_URL` — non-authority |
-
-## Target architecture
+## What a call does
 
 ```
-Agent ──MCP──► iris native ──► decode/crop (Rust)
-                    │
-                    ├─ OCR: tesseract on PATH (opt-in)
-                    └─ VLM caption: opt-in only (Ollama/cloud URL)
+Agent ──MCP──► iris
+                 ├─ read_image: dimensions, format, metadata
+                 ├─ image_probe: format, dimensions, pixel count, hash
+                 ├─ crop_region: one region (PNG bytes only if requested)
+                 ├─ compare_images: equal-size pixel diff
+                 └─ OCR: tesseract on PATH, only when read_image is asked
 ```
 
-### Non-negotiable targets
+The default file cap is 32 MiB (33,554,432 bytes). A cropped region may not exceed 67,108,864 pixels. `compare_images` refuses images whose dimensions differ.
 
-1. Drop **sharp** from the default install once Rust decode covers probe/crop (sharp = optional fallback package only).  
-2. Prefer **Citra packaging**: thin meta package + platform optionalDependencies, not one fat multi-host native in every tarball if avoidable.  
-3. Keep **3 tools max** public: `read_image`, `image_probe`, `crop_region`.  
-4. Never require a cloud vision model for “success”.  
-5. Evidence = bbox + path + route + warnings — not generative rewrite as authority.
-
-## Peer anchors
-
-| Peer class | Gap we exploit |
-| --- | --- |
-| Cloud vision MCP (Grok/OpenAI image) | Needs keys; non-deterministic; weak citeable geometry |
-| Tesseract-only OCR MCP | Text dump without layout/agent_map/crops |
-| Local CLIP gallery search | Retrieval gallery ≠ citeable OCR/regions |
-
-## Zero-config usage
+## Install
 
 ```bash
 npx -y @sylphx/iris
-# read_image { "path": "/abs/a.png", "include_ocr": true }  # needs tesseract for OCR text
 ```
 
-## Progress / residual
+A path-only read does not start Tesseract:
 
-- Native MCP path is fail-closed Rust (primary).  
-- **`sharp` + `exifr` demoted to optionalDependencies** (2026-08-01); Rust decode does not need them.  
-- Remaining hard deps for doctor/TS SDK helpers: `@modelcontextprotocol/sdk`, `zod`.  
-- **Citra-style multi-arch optionalDependencies** for natives (`@sylphx/image-reader-mcp-<platform>`); main package no longer embeds `bin/native` in published files.
+```json
+{ "path": "/absolute/path/to/screenshot.png" }
+```
+
+Text is a separate request:
+
+```json
+{ "path": "/absolute/path/to/screenshot.png", "include_ocr": true }
+```

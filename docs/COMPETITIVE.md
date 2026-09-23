@@ -2,39 +2,34 @@
 
 ## Job
 
-Image evidence for agents
+Image facts for agents: dimensions, format, metadata, opt-in OCR boxes, crops, and equal-size diffs.
 
 ## Wedge
 
-Non-LLM image evidence: metadata, OCR boxes, crops, locators — local and deterministic.
+The default call measures the file and does not run OCR. Text is local Tesseract, and only when you set `include_ocr` or `profile: "quality"`. A missing binary is a gap. Geometry stays citeable either way.
 
 ## Local-first
 
-Local decode/OCR path; no generative vision model required.
+Decode, crop, and diff run locally. OCR uses the `tesseract` binary on `PATH`. No API key. No generative vision model.
 
 ## Peer anchors (learn; do not clone)
 
 | Peer | Gap we exploit |
 | --- | --- |
-| Eventual-Inc/local-image-search | Local CLIP search index — retrieval, not citeable OCR/regions/crops |
-| Tesseract OCR MCP servers | Text dump OCR; weak metadata/region/crop evidence envelopes |
-| Vision LLM tools | Generative, non-deterministic, expensive, not citeable geometry |
+| Local image-search indexes | Retrieval of similar pictures, not dimensions, OCR boxes, or a citeable crop |
+| Tesseract MCP servers that only dump text | A transcription with no file hash, no trust warnings, and no crop |
+| Vision-model tools | A generated description: not deterministic, and not a measured pixel box |
 
 ## Non-goals
 
-- Becoming a cloud SaaS wrapper as the default path
-- Multi-product monorepo for star aggregation
-- Generative summaries as the sole evidence authority
+- A cloud account as the default path
+- A multi-product repo whose only purpose is to pool attention
+- A generated caption as the evidence
 
-## 2026-07-31 research note
-
-See docs/specs/agent-*-read-contract.md for competitive synthesis and product decisions.
-
-
-## Zero-config CTA
+## Install
 
 ```bash
 npx -y @sylphx/iris
 ```
 
-Live **@sylphx/iris@0.2.1**. Bare MCP stdio for agents.
+`@sylphx/iris` is the install. It speaks MCP over stdio.
