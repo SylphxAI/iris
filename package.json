@@ -31,12 +31,24 @@
     "mcp",
     "model-context-protocol",
     "image",
-    "reader",
+    "image-analysis",
     "ocr",
+    "computer-vision",
+    "screenshots",
+    "ui-testing",
+    "image-diff",
     "metadata",
-    "evidence",
-    "sylphx",
-    "agent-media-twin"
+    "exif",
+    "layout-analysis",
+    "crops",
+    "pixel-evidence",
+    "visual-evidence",
+    "local-first",
+    "rust",
+    "ai-agents",
+    "developer-tools",
+    "iris",
+    "sylphx"
   ],
   "engines": {
     "bun": ">=1.4.0"
