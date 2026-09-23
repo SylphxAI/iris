@@ -63,7 +63,7 @@ describe('public copy', () => {
   test('registry description stays within the 100-character marketplace limit', () => {
     const parsed = JSON.parse(read('server.json')) as { description: string };
     expect(parsed.description).toBe(
-      'Iris — image facts with pixel-level proof. OCR runs only when requested.',
+      'Iris — image facts with pixel-level proof. OCR runs only when requested.'
     );
     expect(parsed.description.length).toBeLessThanOrEqual(100);
     expect(parsed.description.toLowerCase()).not.toContain('layout');
