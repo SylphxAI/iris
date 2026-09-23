@@ -30,7 +30,7 @@ pub const SERVER_NAME: &str = "iris";
 /// fallback is only for a build that has neither.
 pub const SERVER_VERSION: &str = match option_env!("IRIS_PRODUCT_VERSION") {
     Some(version) => version,
-    None => "0.4.0",
+    None => "0.4.1",
 };
 pub const SERVER_INSTRUCTIONS: &str =
     "Image facts with pixel-level proof. read_image returns dimensions, format, and metadata, and does not run OCR unless include_ocr is true or profile is quality. image_probe is geometry only. crop_region extracts one region. compare_images diffs two same-size images. OCR uses local tesseract and reports a gap when that binary is missing. No generative vision model.";
