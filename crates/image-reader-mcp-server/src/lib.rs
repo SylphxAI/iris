@@ -24,7 +24,13 @@ impl FreeformToolArgs {
 }
 
 pub const SERVER_NAME: &str = "iris";
-pub const SERVER_VERSION: &str = "0.3.2";
+/// The product version, injected at build time from package.json (see the
+/// `build:rust` script). Falls back to the release this source last shipped so a
+/// plain `cargo build` still compiles.
+pub const SERVER_VERSION: &str = match option_env!("IRIS_PRODUCT_VERSION") {
+    Some(version) => version,
+    None => "0.3.3",
+};
 pub const SERVER_INSTRUCTIONS: &str =
     "Evidence-first image reader MCP server (Rust rmcp transport). Use read_image for Agent Media Twin metadata, optional region evidence, and trust warnings without generative LLM.";
 

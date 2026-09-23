@@ -2,7 +2,7 @@
   "name": "@sylphx/iris",
   "version": "0.3.3",
   "mcpName": "io.github.SylphxAI/iris",
-  "description": "Iris — image facts with pixel-level proof. Local-first metadata, OCR boxes, layout, crops, and image diff evidence.",
+  "description": "Iris \u2014 image facts with pixel-level proof. Local-first metadata, OCR boxes, layout, crops, and image diff evidence.",
   "type": "module",
   "bin": {
     "iris": "./bin/iris"
@@ -54,7 +54,7 @@
     "bun": ">=1.4.0"
   },
   "scripts": {
-    "build:rust": "cargo build --release -p image-reader-core -p image-reader-cli -p image-reader-mcp-server && bun scripts/stage-rust-mcp.ts",
+    "build:rust": "IRIS_PRODUCT_VERSION=$(node -p \"require('./package.json').version\") cargo build --release -p image-reader-core -p image-reader-cli -p image-reader-mcp-server && bun scripts/stage-rust-mcp.ts",
     "test:rust": "cargo test",
     "build": "bun build src/doctor-cli.ts --outdir dist --target node",
     "watch": "tsc --watch",
