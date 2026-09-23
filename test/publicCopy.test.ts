@@ -52,14 +52,21 @@ function read(rel: string): string {
 }
 
 describe('public copy', () => {
-  test('package and server descriptions match the geometry-first sentence', () => {
-    for (const file of ['package.json', 'server.json']) {
-      const parsed = JSON.parse(read(file)) as { description: string; keywords?: string[] };
-      expect(parsed.description).toBe(description);
-      expect(parsed.description.toLowerCase()).not.toContain('layout');
-    }
+  test('package description is the geometry-first sentence', () => {
+    const parsed = JSON.parse(read('package.json')) as { description: string; keywords?: string[] };
+    expect(parsed.description).toBe(description);
+    expect(parsed.description.toLowerCase()).not.toContain('layout');
     const keywords = (JSON.parse(read('package.json')) as { keywords: string[] }).keywords;
     expect(keywords).not.toContain('layout-analysis');
+  });
+
+  test('registry description stays within the 100-character marketplace limit', () => {
+    const parsed = JSON.parse(read('server.json')) as { description: string };
+    expect(parsed.description).toBe(
+      'Iris — image facts with pixel-level proof. OCR runs only when requested.'
+    );
+    expect(parsed.description.length).toBeLessThanOrEqual(100);
+    expect(parsed.description.toLowerCase()).not.toContain('layout');
   });
 
   test('public pages do not claim the old default', () => {
