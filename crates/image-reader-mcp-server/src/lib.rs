@@ -1,4 +1,5 @@
 pub mod http_transport;
+pub mod ocr;
 pub mod read_image;
 pub mod tool_routes;
 
@@ -32,7 +33,7 @@ pub const SERVER_VERSION: &str = match option_env!("IRIS_PRODUCT_VERSION") {
     None => "0.3.3",
 };
 pub const SERVER_INSTRUCTIONS: &str =
-    "Evidence-first image reader MCP server (Rust rmcp transport). Use read_image for Agent Media Twin metadata, optional region evidence, and trust warnings without generative LLM.";
+    "Image facts with pixel-level proof. read_image returns dimensions, format, and metadata, and does not run OCR unless include_ocr is true or profile is quality. image_probe is geometry only. crop_region extracts one region. compare_images diffs two same-size images. OCR uses local tesseract and reports a gap when that binary is missing. No generative vision model.";
 
 #[derive(Clone)]
 pub struct ImageReaderMcp {
@@ -50,7 +51,7 @@ impl ImageReaderMcp {
 #[tool_router]
 impl ImageReaderMcp {
     #[tool(
-        description = "Evidence-first image reader. Returns an Agent Media Twin with filename, mime, dimensions, optional region evidence, and trust warnings. No generative LLM is used."
+        description = "Read one local image. Returns dimensions, format, metadata, and trust warnings. Does not run OCR unless include_ocr is true or profile is quality. A region argument crops as part of this read. No generative vision model."
     )]
     fn read_image(
         &self,
@@ -60,13 +61,33 @@ impl ImageReaderMcp {
     }
 
     #[tool(
-        description = "Compare two same-size images and report changed pixels and a changed bounding box."
+        description = "Compare two same-size images and report changed pixels and a changed bounding box. This does not run OCR."
     )]
     fn compare_images(
         &self,
         Parameters(args): Parameters<FreeformToolArgs>,
     ) -> Result<rmcp::model::CallToolResult, ErrorData> {
         read_image::compare_images(args.into_value())
+    }
+
+    #[tool(
+        description = "Cheap image probe. Returns format, dimensions, pixel count, and source hash. Does not run OCR, crop, or a vision model."
+    )]
+    fn image_probe(
+        &self,
+        Parameters(args): Parameters<FreeformToolArgs>,
+    ) -> Result<rmcp::model::CallToolResult, ErrorData> {
+        read_image::image_probe(args.into_value())
+    }
+
+    #[tool(
+        description = "Extract one citeable region from a local image. Returns the crop hash and pixel bounds. Set include_region_image to true for PNG bytes. Does not run OCR."
+    )]
+    fn crop_region(
+        &self,
+        Parameters(args): Parameters<FreeformToolArgs>,
+    ) -> Result<rmcp::model::CallToolResult, ErrorData> {
+        read_image::crop_region(args.into_value())
     }
 }
 
@@ -94,6 +115,12 @@ mod tests {
         let tools = ImageReaderMcp::new().tool_router.list_all();
         let names: Vec<_> = tools.iter().map(|tool| tool.name.to_string()).collect();
         assert!(names.contains(&"read_image".to_string()));
+        assert!(names.contains(&"image_probe".to_string()));
+        assert!(names.contains(&"crop_region".to_string()));
+        assert!(names.contains(&"compare_images".to_string()));
+        let read_image = tools.iter().find(|tool| tool.name == "read_image").expect("read_image");
+        let description = read_image.description.as_deref().unwrap_or("");
+        assert!(description.contains("Does not run OCR unless"));
     }
 
     #[test]

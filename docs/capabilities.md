@@ -12,14 +12,14 @@
 
 | Capability | Tool | Evidence |
 | --- | --- | --- |
-| Image read | `read_image` | dimensions, format, hash, metadata, OCR lines/words with boxes, layout, agent map |
-| Cheap probe | `image_probe` | metadata and geometry without full OCR |
-| Region crop | `crop_region` | pixel region with bbox and provenance |
-| Image comparison | `compare_images` | deterministic pixel diff and changed-region bbox |
+| Image read | `read_image` | dimensions, format, metadata, trust warnings; OCR lines only when requested |
+| Probe | `image_probe` | format, dimensions, pixel count, source hash. No OCR. |
+| Region crop | `crop_region` | pixel bounds and hash; PNG bytes only when `include_region_image` is true |
+| Image comparison | `compare_images` | changed pixels and a changed box, for equal dimensions. No OCR. |
 
 ## Evidence contract
 
-Every result carries source path/hash, pixel locators, extraction route, warnings and gaps. See [EVIDENCE_CONTRACT.md](./EVIDENCE_CONTRACT.md).
+Every result carries a source path or hash, pixel bounds where a region was measured, a route, warnings, and gaps. See [EVIDENCE_CONTRACT.md](./EVIDENCE_CONTRACT.md).
 
 ## Not owned
 

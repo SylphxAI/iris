@@ -1,6 +1,6 @@
-# Image Reader MCP
+# Iris
 
-Evidence-first image reading for AI agents — metadata, OCR text, regions, and citeable evidence without generative LLM.
+Iris — image facts with pixel-level proof. Dimensions, format, and metadata by default; local Tesseract OCR only when requested.
 
 ## Lifecycle
 
@@ -11,7 +11,7 @@ Evidence-first image reading for AI agents — metadata, OCR text, regions, and 
 ## Goals
 
 - Local-first MCP package with evidence-first read output and benchmark-gated releases.
-- Preserve provenance so agents can cite sources (page, frame, time, bbox).
+- Preserve provenance so agents can cite a source path, a hash, and a pixel bbox.
 
 ## Non-Goals
 
