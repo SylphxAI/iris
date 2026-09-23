@@ -26,6 +26,15 @@ jobs:
         with:
           bun-version: '1.4.0'
 
+      - name: Setup Node (changesets publish requires npm on PATH)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
