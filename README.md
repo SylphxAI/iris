@@ -1,3 +1,5 @@
+> **Merged into [anymd](https://github.com/SylphxAI/anymd) (2026-09-25).** anymd reads PDFs, Office files, EPUB, web pages, images and video into clean Markdown for AI agents: `npx -y @sylphx/anymd`. This repository is archived.
+
 <div align="center">
 
 <img src="docs/public/logo.svg" alt="Iris" width="108" height="108" />
